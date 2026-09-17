@@ -19,6 +19,9 @@ var historyList =
 var analysis =
   document.getElementById("analysis");
 
+var todayPlan =
+  document.getElementById("todayPlan");
+
 saveButton.addEventListener("click", function() {
 
   var exercise =
@@ -286,6 +289,7 @@ clearButton.addEventListener(
 displayWorkouts();
 displayHistory();
 displayAnalysis();
+displayTodayPlan();
 function displayHistory() {
 
   historyList.innerHTML = "";
@@ -468,5 +472,116 @@ function displayAnalysis() {
     " 次）<br><br>" +
 
     "💡 建議：繼續記錄訓練，之後我可以根據你的歷史表現計算更個人化的訓練建議。";
+
+}
+function displayTodayPlan() {
+
+  var day =
+    new Date().getDay();
+
+
+  var plans = {
+
+    0: {
+      title: "🛌 休息日",
+      exercises: [
+        "輕鬆伸展 5～10 分鐘",
+        "散步或自由活動"
+      ]
+    },
+
+    1: {
+      title: "🦵 下肢日",
+      exercises: [
+        "深蹲 3 組 × 10 次",
+        "臀推 3 組 × 12 次",
+        "羅馬尼亞硬舉 3 組 × 10 次"
+      ]
+    },
+
+    2: {
+      title: "💪 上肢日",
+      exercises: [
+        "啞鈴划船 3 組 × 10 次",
+        "啞鈴肩推 3 組 × 10 次",
+        "二頭彎舉 3 組 × 12 次"
+      ]
+    },
+
+    3: {
+      title: "🧘 恢復日",
+      exercises: [
+        "輕鬆伸展 5～10 分鐘",
+        "散步 10～20 分鐘"
+      ]
+    },
+
+    4: {
+      title: "🍑 下肢＋臀",
+      exercises: [
+        "深蹲 3 組 × 10 次",
+        "臀推 3 組 × 12 次",
+        "側抬腿 3 組 × 12 次"
+      ]
+    },
+
+    5: {
+      title: "💪 全身訓練",
+      exercises: [
+        "深蹲 3 組 × 10 次",
+        "啞鈴划船 3 組 × 10 次",
+        "臀推 3 組 × 12 次"
+      ]
+    },
+
+    6: {
+      title: "🚶 自由活動日",
+      exercises: [
+        "散步 15～30 分鐘",
+        "自由選擇喜歡的運動"
+      ]
+    }
+
+  };
+
+
+  var plan =
+    plans[day];
+
+
+  var html =
+    "<h3>" +
+    plan.title +
+    "</h3>";
+
+
+  html +=
+    "<p>今天不用想太多，照著完成就好。</p>";
+
+
+  html += "<ol>";
+
+
+  plan.exercises.forEach(
+    function(exercise) {
+
+      html +=
+        "<li>" +
+        exercise +
+        "</li>";
+
+    }
+  );
+
+
+  html += "</ol>";
+
+
+  html +=
+    "<p>⏱️ 預估時間：20～30 分鐘</p>";
+
+
+  todayPlan.innerHTML =
+    html;
 
 }
