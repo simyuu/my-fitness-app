@@ -13,6 +13,8 @@ var workoutList =
 var totalVolume =
   document.getElementById("totalVolume");
 
+var historyList =
+  document.getElementById("historyList");
 
 saveButton.addEventListener("click", function() {
 
@@ -78,7 +80,7 @@ saveButton.addEventListener("click", function() {
 
 
   displayWorkouts();
-
+displayHistory();
 });
 
 
@@ -279,3 +281,79 @@ clearButton.addEventListener(
 
 
 displayWorkouts();
+displayHistory();
+function displayHistory() {
+
+  historyList.innerHTML = "";
+
+  if (workouts.length === 0) {
+
+    historyList.textContent =
+      "還沒有歷史紀錄。";
+
+    return;
+  }
+
+
+  var sortedWorkouts =
+    workouts.slice().sort(function(a, b) {
+
+      return b.id - a.id;
+
+    });
+
+
+  sortedWorkouts.forEach(function(workout) {
+
+    var div =
+      document.createElement("div");
+
+    div.className =
+      "workout";
+
+
+    var name =
+      document.createElement("div");
+
+    name.className =
+      "workout-name";
+
+    name.textContent =
+      "🏋️ " + workout.exercise;
+
+
+    var detail =
+      document.createElement("div");
+
+    detail.className =
+      "workout-detail";
+
+    var volume =
+      workout.weight *
+      workout.reps *
+      workout.sets;
+
+
+    detail.textContent =
+      workout.date +
+      "｜" +
+      workout.weight +
+      " kg × " +
+      workout.reps +
+      " 次 × " +
+      workout.sets +
+      " 組" +
+      "｜訓練量：" +
+      volume +
+      " kg";
+
+
+    div.appendChild(name);
+
+    div.appendChild(detail);
+
+    historyList.appendChild(div);
+
+  });
+
+}
