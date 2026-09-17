@@ -1,6 +1,7 @@
 var workouts =
   JSON.parse(localStorage.getItem("myWorkouts")) || [];
 
+
 var saveButton =
   document.getElementById("saveButton");
 
@@ -22,27 +23,23 @@ var analysis =
 var todayPlan =
   document.getElementById("todayPlan");
 
-var completion =
-  document.getElementById("completion");
-
-var difficulty =
-  document.getElementById("difficulty");
-
 var lastWorkout =
   document.getElementById("lastWorkout");
 
 var weightAdvice =
   document.getElementById("weightAdvice");
 
-document
-  .getElementById("exercise")
-  .addEventListener("input", function() {
+var completion =
+  document.getElementById("completion");
 
-    showLastWorkout(
-      this.value.trim()
-    );
+var difficulty =
+  document.getElementById("difficulty");
 
-  });
+
+
+/* =========================
+   儲存訓練
+========================= */
 
 saveButton.addEventListener("click", function() {
 
@@ -87,14 +84,14 @@ saveButton.addEventListener("click", function() {
 
     reps: reps,
 
-    sets: sets
+    sets: sets,
 
-      completion:
-    completion.value,
+    completion:
+      completion.value,
 
-  difficulty:
-    difficulty.value
-  
+    difficulty:
+      difficulty.value
+
   };
 
 
@@ -114,9 +111,16 @@ saveButton.addEventListener("click", function() {
 
 
   displayWorkouts();
-displayHistory();
+  displayHistory();
+  displayAnalysis();
+
 });
 
+
+
+/* =========================
+   今日訓練
+========================= */
 
 function displayWorkouts() {
 
@@ -141,7 +145,7 @@ function displayWorkouts() {
 
   if (todayWorkouts.length === 0) {
 
-    workoutList.innerHTML =
+    workoutList.textContent =
       "還沒有訓練紀錄。";
 
   }
@@ -232,6 +236,11 @@ function displayWorkouts() {
 }
 
 
+
+/* =========================
+   刪除單筆
+========================= */
+
 function deleteWorkout(id) {
 
   workouts =
@@ -249,9 +258,16 @@ function deleteWorkout(id) {
 
 
   displayWorkouts();
+  displayHistory();
+  displayAnalysis();
 
 }
 
+
+
+/* =========================
+   清除今天
+========================= */
 
 clearButton.addEventListener(
   "click",
@@ -278,6 +294,7 @@ clearButton.addEventListener(
       );
 
       return;
+
     }
 
 
@@ -309,18 +326,22 @@ clearButton.addEventListener(
 
 
     displayWorkouts();
+    displayHistory();
+    displayAnalysis();
 
   }
 );
 
 
-displayWorkouts();
-displayHistory();
-displayAnalysis();
-displayTodayPlan();
+
+/* =========================
+   訓練歷史
+========================= */
+
 function displayHistory() {
 
   historyList.innerHTML = "";
+
 
   if (workouts.length === 0) {
 
@@ -328,6 +349,7 @@ function displayHistory() {
       "還沒有歷史紀錄。";
 
     return;
+
   }
 
 
@@ -364,43 +386,71 @@ function displayHistory() {
     detail.className =
       "workout-detail";
 
+
     var volume =
       workout.weight *
       workout.reps *
       workout.sets;
 
-    var completionText = "";
 
-if (workout.completion === "completed") {
-  completionText = "✅ 全部完成";
-}
-
-else if (workout.completion === "partial") {
-  completionText = "🟡 部分完成";
-}
-
-else {
-  completionText = "⏭️ 跳過";
-}
+    var completionText =
+      "";
 
 
-var difficultyText = "";
+    if (workout.completion === "completed") {
 
-if (workout.difficulty === "easy") {
-  difficultyText = "😎 太輕鬆";
-}
+      completionText =
+        "✅ 全部完成";
 
-else if (workout.difficulty === "normal") {
-  difficultyText = "🙂 剛剛好";
-}
+    }
 
-else if (workout.difficulty === "hard") {
-  difficultyText = "😮‍💨 有點重";
-}
+    else if (workout.completion === "partial") {
 
-else {
-  difficultyText = "🥵 太重";
-}
+      completionText =
+        "🟡 部分完成";
+
+    }
+
+    else {
+
+      completionText =
+        "⏭️ 跳過";
+
+    }
+
+
+    var difficultyText =
+      "";
+
+
+    if (workout.difficulty === "easy") {
+
+      difficultyText =
+        "😎 太輕鬆";
+
+    }
+
+    else if (workout.difficulty === "normal") {
+
+      difficultyText =
+        "🙂 剛剛好";
+
+    }
+
+    else if (workout.difficulty === "hard") {
+
+      difficultyText =
+        "😮‍💨 有點重";
+
+    }
+
+    else {
+
+      difficultyText =
+        "🥵 太重";
+
+    }
+
 
     detail.textContent =
       workout.date +
@@ -413,15 +463,14 @@ else {
       " 組" +
       "｜訓練量：" +
       volume +
-      " kg";
-    "｜" +
-  completionText +
-  "｜" +
-  difficultyText;
+      " kg" +
+      "｜" +
+      completionText +
+      "｜" +
+      difficultyText;
 
 
     div.appendChild(name);
-
     div.appendChild(detail);
 
     historyList.appendChild(div);
@@ -429,6 +478,13 @@ else {
   });
 
 }
+
+
+
+/* =========================
+   個人分析
+========================= */
+
 function displayAnalysis() {
 
   if (workouts.length === 0) {
@@ -437,16 +493,12 @@ function displayAnalysis() {
       "累積一些訓練紀錄後，我會開始分析你的進步。";
 
     return;
+
   }
 
 
-  var totalSessions =
-    workouts.length;
-
-
   var bestVolume = 0;
-
-  var bestWorkout = null;
+  var bestWorkout = workouts[0];
 
 
   workouts.forEach(function(workout) {
@@ -460,7 +512,6 @@ function displayAnalysis() {
     if (volume > bestVolume) {
 
       bestVolume = volume;
-
       bestWorkout = workout;
 
     }
@@ -485,7 +536,6 @@ function displayAnalysis() {
 
 
   var mostTrainedExercise = "";
-
   var mostTrainedCount = 0;
 
 
@@ -512,7 +562,7 @@ function displayAnalysis() {
   analysis.innerHTML =
 
     "📚 累積訓練紀錄：" +
-    totalSessions +
+    workouts.length +
     " 筆<br><br>" +
 
     "🏆 目前最高單次訓練量：" +
@@ -533,11 +583,128 @@ function displayAnalysis() {
     mostTrainedExercise +
     "（" +
     mostTrainedCount +
-    " 次）<br><br>" +
-
-    "💡 建議：繼續記錄訓練，之後我可以根據你的歷史表現計算更個人化的訓練建議。";
+    " 次）";
 
 }
+
+
+
+/* =========================
+   上次紀錄
+========================= */
+
+document
+  .getElementById("exercise")
+  .addEventListener("input", function() {
+
+    showLastWorkout(
+      this.value.trim()
+    );
+
+  });
+
+
+
+function showLastWorkout(exerciseName) {
+
+  if (exerciseName === "") {
+
+    lastWorkout.textContent =
+      "輸入運動名稱後，會顯示上次紀錄。";
+
+    weightAdvice.textContent =
+      "等待運動資料……";
+
+    return;
+
+  }
+
+
+  var previous =
+    workouts
+      .filter(function(workout) {
+
+        return (
+          workout.exercise.toLowerCase() ===
+          exerciseName.toLowerCase()
+        );
+
+      })
+      .sort(function(a, b) {
+
+        return b.id - a.id;
+
+      });
+
+
+  if (previous.length === 0) {
+
+    lastWorkout.textContent =
+      "🆕 還沒有這個運動的紀錄。";
+
+    weightAdvice.textContent =
+      "💡 建議：第一次做這個動作，先使用自己能穩定控制的保守重量。";
+
+    return;
+
+  }
+
+
+  var last =
+    previous[0];
+
+
+  lastWorkout.textContent =
+    "📌 上次紀錄：" +
+    last.weight +
+    " kg × " +
+    last.reps +
+    " 次 × " +
+    last.sets +
+    " 組" +
+    "（" +
+    last.date +
+    "）";
+
+
+  if (last.reps < 8) {
+
+    weightAdvice.textContent =
+      "⚠️ 上次次數偏低：今天先維持這個重量，優先確保動作穩定。";
+
+  }
+
+  else if (last.reps < 12) {
+
+    weightAdvice.textContent =
+      "💡 建議：今天可以先維持 " +
+      last.weight +
+      " kg，目標完成 8～12 次。";
+
+  }
+
+  else {
+
+    var suggestedWeight =
+      last.weight + 1;
+
+    weightAdvice.textContent =
+      "📈 上次已完成 " +
+      last.reps +
+      " 次，可以考慮下次嘗試 " +
+      suggestedWeight +
+      " kg，前提是動作穩定。";
+
+  }
+
+}
+
+
+
+/* =========================
+   今日任務
+========================= */
+
 function displayTodayPlan() {
 
   var day =
@@ -649,95 +816,14 @@ function displayTodayPlan() {
     html;
 
 }
-function showLastWorkout(exerciseName) {
-
-  if (exerciseName === "") {
-
-    lastWorkout.textContent =
-      "輸入運動名稱後，會顯示上次紀錄。";
-
-    weightAdvice.textContent =
-  "等待運動資料……";
-    
-    return;
-
-  }
 
 
-  var previous =
-    workouts
-      .filter(function(workout) {
 
-        return (
-          workout.exercise.toLowerCase() ===
-          exerciseName.toLowerCase()
-        );
+/* =========================
+   啟動 App
+========================= */
 
-      })
-      .sort(function(a, b) {
-
-        return b.id - a.id;
-
-      });
-
-
-  if (previous.length === 0) {
-
-    lastWorkout.textContent =
-      "🆕 還沒有這個運動的紀錄。";
-    
-      weightAdvice.textContent =
-    "💡 建議：第一次做這個動作，先使用自己能穩定控制的保守重量。";
-
-    return;
-
-  }
-
-
-  var last =
-    previous[0];
-
-
-  lastWorkout.textContent =
-    "📌 上次紀錄：" +
-    last.weight +
-    " kg × " +
-    last.reps +
-    " 次 × " +
-    last.sets +
-    " 組" +
-    "（" +
-    last.date +
-    "）";
-
-  if (last.reps < 8) {
-
-  weightAdvice.textContent =
-    "⚠️ 上次次數偏低：今天先維持這個重量，優先確保動作穩定。";
-
-}
-
-else if (last.reps < 12) {
-
-  weightAdvice.textContent =
-    "💡 建議：今天可以先維持 " +
-    last.weight +
-    " kg，目標完成 8～12 次。";
-
-}
-
-else {
-
-  var suggestedWeight =
-    last.weight + 1;
-
-  weightAdvice.textContent =
-    "📈 上次已完成 " +
-    last.reps +
-    " 次，可以考慮下次嘗試 " +
-    suggestedWeight +
-    " kg，前提是動作穩定。";
-
-}
-
-}
+displayWorkouts();
+displayHistory();
+displayAnalysis();
+displayTodayPlan();
