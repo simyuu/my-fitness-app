@@ -22,6 +22,12 @@ var analysis =
 var todayPlan =
   document.getElementById("todayPlan");
 
+var completion =
+  document.getElementById("completion");
+
+var difficulty =
+  document.getElementById("difficulty");
+
 var lastWorkout =
   document.getElementById("lastWorkout");
 
@@ -83,6 +89,12 @@ saveButton.addEventListener("click", function() {
 
     sets: sets
 
+      completion:
+    completion.value,
+
+  difficulty:
+    difficulty.value
+  
   };
 
 
@@ -357,6 +369,38 @@ function displayHistory() {
       workout.reps *
       workout.sets;
 
+    var completionText = "";
+
+if (workout.completion === "completed") {
+  completionText = "✅ 全部完成";
+}
+
+else if (workout.completion === "partial") {
+  completionText = "🟡 部分完成";
+}
+
+else {
+  completionText = "⏭️ 跳過";
+}
+
+
+var difficultyText = "";
+
+if (workout.difficulty === "easy") {
+  difficultyText = "😎 太輕鬆";
+}
+
+else if (workout.difficulty === "normal") {
+  difficultyText = "🙂 剛剛好";
+}
+
+else if (workout.difficulty === "hard") {
+  difficultyText = "😮‍💨 有點重";
+}
+
+else {
+  difficultyText = "🥵 太重";
+}
 
     detail.textContent =
       workout.date +
@@ -370,6 +414,10 @@ function displayHistory() {
       "｜訓練量：" +
       volume +
       " kg";
+    "｜" +
+  completionText +
+  "｜" +
+  difficultyText;
 
 
     div.appendChild(name);
