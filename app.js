@@ -667,35 +667,72 @@ function showLastWorkout(exerciseName) {
     "）";
 
 
-  if (last.reps < 8) {
+  if (last.completion === "skipped") {
 
-    weightAdvice.textContent =
-      "⚠️ 上次次數偏低：今天先維持這個重量，優先確保動作穩定。";
+  weightAdvice.textContent =
+    "⏭️ 上次跳過這個動作，今天先依照目前狀態決定是否需要訓練。";
 
-  }
+}
 
-  else if (last.reps < 12) {
+else if (last.completion === "partial") {
 
-    weightAdvice.textContent =
-      "💡 建議：今天可以先維持 " +
-      last.weight +
-      " kg，目標完成 8～12 次。";
+  weightAdvice.textContent =
+    "🟡 上次沒有全部完成，今天先不要增加重量。";
 
-  }
+}
 
-  else {
+else if (last.difficulty === "tooHard") {
 
-    var suggestedWeight =
-      last.weight + 1;
+  weightAdvice.textContent =
+    "🥵 上次覺得太重，今天可以考慮降低重量，優先維持動作品質。";
 
-    weightAdvice.textContent =
-      "📈 上次已完成 " +
-      last.reps +
-      " 次，可以考慮下次嘗試 " +
-      suggestedWeight +
-      " kg，前提是動作穩定。";
+}
 
-  }
+else if (
+  last.difficulty === "hard"
+) {
+
+  weightAdvice.textContent =
+    "😮‍💨 上次有點重，今天先維持 " +
+    last.weight +
+    " kg。";
+
+}
+
+else if (
+  last.difficulty === "normal"
+) {
+
+  weightAdvice.textContent =
+    "🙂 上次剛剛好，今天可以先維持 " +
+    last.weight +
+    " kg。";
+
+}
+
+else if (
+  last.difficulty === "easy" &&
+  last.reps >= 12
+) {
+
+  var suggestedWeight =
+    last.weight + 1;
+
+  weightAdvice.textContent =
+    "📈 上次全部完成而且覺得輕鬆，可以考慮嘗試 " +
+    suggestedWeight +
+    " kg。";
+
+}
+
+else {
+
+  weightAdvice.textContent =
+    "💡 上次表現不錯，今天先維持 " +
+    last.weight +
+    " kg。";
+
+}
 
 }
 
