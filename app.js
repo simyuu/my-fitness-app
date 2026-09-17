@@ -689,13 +689,13 @@ else if (last.difficulty === "tooHard") {
 }
 
 else if (
-  last.difficulty === "hard"
+    last.difficulty === "hard"
 ) {
 
-  weightAdvice.textContent =
-    "😮‍💨 上次有點重，今天先維持 " +
-    last.weight +
-    " kg。";
+    weightAdvice.textContent =
+      "😮‍💨 上次覺得有點重，今天先不要加重量。可以維持 " +
+      last.weight +
+      " kg；如果今天狀態不好，可以適度降低重量。";
 
 }
 
