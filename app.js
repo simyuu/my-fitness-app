@@ -634,6 +634,9 @@ function showLastWorkout(exerciseName) {
 
     lastWorkout.textContent =
       "🆕 還沒有這個運動的紀錄。";
+    
+      weightAdvice.textContent =
+    "💡 建議：第一次做這個動作，先使用自己能穩定控制的保守重量。";
 
     return;
 
