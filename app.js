@@ -608,6 +608,9 @@ function showLastWorkout(exerciseName) {
     lastWorkout.textContent =
       "輸入運動名稱後，會顯示上次紀錄。";
 
+    weightAdvice.textContent =
+  "等待運動資料……";
+    
     return;
 
   }
@@ -658,5 +661,35 @@ function showLastWorkout(exerciseName) {
     "（" +
     last.date +
     "）";
+
+  if (last.reps < 8) {
+
+  weightAdvice.textContent =
+    "⚠️ 上次次數偏低：今天先維持這個重量，優先確保動作穩定。";
+
+}
+
+else if (last.reps < 12) {
+
+  weightAdvice.textContent =
+    "💡 建議：今天可以先維持 " +
+    last.weight +
+    " kg，目標完成 8～12 次。";
+
+}
+
+else {
+
+  var suggestedWeight =
+    last.weight + 1;
+
+  weightAdvice.textContent =
+    "📈 上次已完成 " +
+    last.reps +
+    " 次，可以考慮下次嘗試 " +
+    suggestedWeight +
+    " kg，前提是動作穩定。";
+
+}
 
 }
