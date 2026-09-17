@@ -16,6 +16,9 @@ var totalVolume =
 var historyList =
   document.getElementById("historyList");
 
+var analysis =
+  document.getElementById("analysis");
+
 saveButton.addEventListener("click", function() {
 
   var exercise =
@@ -282,6 +285,7 @@ clearButton.addEventListener(
 
 displayWorkouts();
 displayHistory();
+displayAnalysis();
 function displayHistory() {
 
   historyList.innerHTML = "";
@@ -355,5 +359,114 @@ function displayHistory() {
     historyList.appendChild(div);
 
   });
+
+}
+function displayAnalysis() {
+
+  if (workouts.length === 0) {
+
+    analysis.textContent =
+      "累積一些訓練紀錄後，我會開始分析你的進步。";
+
+    return;
+  }
+
+
+  var totalSessions =
+    workouts.length;
+
+
+  var bestVolume = 0;
+
+  var bestWorkout = null;
+
+
+  workouts.forEach(function(workout) {
+
+    var volume =
+      workout.weight *
+      workout.reps *
+      workout.sets;
+
+
+    if (volume > bestVolume) {
+
+      bestVolume = volume;
+
+      bestWorkout = workout;
+
+    }
+
+  });
+
+
+  var exerciseCount = {};
+
+
+  workouts.forEach(function(workout) {
+
+    if (!exerciseCount[workout.exercise]) {
+
+      exerciseCount[workout.exercise] = 0;
+
+    }
+
+    exerciseCount[workout.exercise]++;
+
+  });
+
+
+  var mostTrainedExercise = "";
+
+  var mostTrainedCount = 0;
+
+
+  for (
+    var exercise in exerciseCount
+  ) {
+
+    if (
+      exerciseCount[exercise] >
+      mostTrainedCount
+    ) {
+
+      mostTrainedExercise =
+        exercise;
+
+      mostTrainedCount =
+        exerciseCount[exercise];
+
+    }
+
+  }
+
+
+  analysis.innerHTML =
+
+    "📚 累積訓練紀錄：" +
+    totalSessions +
+    " 筆<br><br>" +
+
+    "🏆 目前最高單次訓練量：" +
+    bestVolume +
+    " kg<br>" +
+
+    "　" +
+    bestWorkout.exercise +
+    "｜" +
+    bestWorkout.weight +
+    " kg × " +
+    bestWorkout.reps +
+    " × " +
+    bestWorkout.sets +
+    "<br><br>" +
+
+    "🔁 最常訓練：" +
+    mostTrainedExercise +
+    "（" +
+    mostTrainedCount +
+    " 次）<br><br>" +
+
+    "💡 建議：繼續記錄訓練，之後我可以根據你的歷史表現計算更個人化的訓練建議。";
 
 }
