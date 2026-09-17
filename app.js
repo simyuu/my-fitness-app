@@ -25,6 +25,9 @@ var todayPlan =
 var lastWorkout =
   document.getElementById("lastWorkout");
 
+var weightAdvice =
+  document.getElementById("weightAdvice");
+
 document
   .getElementById("exercise")
   .addEventListener("input", function() {
