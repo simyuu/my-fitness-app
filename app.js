@@ -22,6 +22,19 @@ var analysis =
 var todayPlan =
   document.getElementById("todayPlan");
 
+var lastWorkout =
+  document.getElementById("lastWorkout");
+
+document
+  .getElementById("exercise")
+  .addEventListener("input", function() {
+
+    showLastWorkout(
+      this.value.trim()
+    );
+
+  });
+
 saveButton.addEventListener("click", function() {
 
   var exercise =
@@ -583,5 +596,61 @@ function displayTodayPlan() {
 
   todayPlan.innerHTML =
     html;
+
+}
+function showLastWorkout(exerciseName) {
+
+  if (exerciseName === "") {
+
+    lastWorkout.textContent =
+      "輸入運動名稱後，會顯示上次紀錄。";
+
+    return;
+
+  }
+
+
+  var previous =
+    workouts
+      .filter(function(workout) {
+
+        return (
+          workout.exercise.toLowerCase() ===
+          exerciseName.toLowerCase()
+        );
+
+      })
+      .sort(function(a, b) {
+
+        return b.id - a.id;
+
+      });
+
+
+  if (previous.length === 0) {
+
+    lastWorkout.textContent =
+      "🆕 還沒有這個運動的紀錄。";
+
+    return;
+
+  }
+
+
+  var last =
+    previous[0];
+
+
+  lastWorkout.textContent =
+    "📌 上次紀錄：" +
+    last.weight +
+    " kg × " +
+    last.reps +
+    " 次 × " +
+    last.sets +
+    " 組" +
+    "（" +
+    last.date +
+    "）";
 
 }
