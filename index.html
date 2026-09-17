@@ -73,7 +73,23 @@
         id="sets"
         type="number"
         placeholder="例如：3">
+      
+<label>完成狀態</label>
 
+<select id="completion">
+  <option value="completed">✅ 全部完成</option>
+  <option value="partial">🟡 部分完成</option>
+  <option value="skipped">⏭️ 跳過</option>
+</select>
+
+<label>訓練感受</label>
+
+<select id="difficulty">
+  <option value="easy">😎 太輕鬆</option>
+  <option value="normal">🙂 剛剛好</option>
+  <option value="hard">😮‍💨 有點重</option>
+  <option value="tooHard">🥵 太重</option>
+</select>
 
       <button id="saveButton">
         ＋ 儲存訓練
